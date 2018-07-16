@@ -1,0 +1,22 @@
+language: go
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      before_script:
+        - mkdir $HOME/gopath/src/github.com/opencontrol/
+        - ln -s $HOME/gopath/src/github.com/redhatrises/compliance-masonry $HOME/gopath/src/github.com/opencontrol/compliance-masonry
+      script:
+        - make build
+        - cd _output && mkdir -p compliance-masonry.app/Contents/MacOS/
+        - cp -p masonry compliance-masonry.app/Contents/MacOS/
+        - ../build/dmg/osx-create-dmg.sh
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: scap-workbench-$TRAVIS_TAG.dmg
+  skip_cleanup: true
+  on:
+    tags: true
