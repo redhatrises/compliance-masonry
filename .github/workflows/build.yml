@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build compliance-masonry
-        run: make build
+        run: go build -o _output/ ./cmd/...
 
       - name: Run tests
         run: |
